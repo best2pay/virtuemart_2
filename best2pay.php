@@ -341,7 +341,7 @@ class plgVmPaymentBest2Pay extends vmPSPlugin {
 				if ($signature !== $response->signature)
 					throw new Exception("Invalid signature");
 
-				if ($response->type != 'PURCHASE' || $response->state != 'APPROVED')
+                if (($response->type != 'PURCHASE_BY_QR' && $response->type != 'PURCHASE' && $response->type != 'AUTHORIZE') || $response->state != 'APPROVED')
 					continue;
 
 				$totalInPaymentCurrency = plgVmPaymentBest2Pay::getAmountInCurrency($order['details']['BT']->order_total, $method->payment_currency);
@@ -426,7 +426,7 @@ class plgVmPaymentBest2Pay extends vmPSPlugin {
 
 		header('Content-type: text/plain');
 
-		if ($response->type != 'PURCHASE' || $response->state != 'APPROVED')
+        if (($response->type != 'PURCHASE_BY_QR' && $response->type != 'PURCHASE' && $response->type != 'AUTHORIZE') || $response->state != 'APPROVED')
 			die('error 4');
 
 		$signature = $response->signature;
